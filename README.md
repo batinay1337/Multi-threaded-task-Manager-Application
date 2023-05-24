@@ -71,7 +71,10 @@ Enter resource 10: 1
 
 2. Start the application.
 
+```
 gcc -o main main.c
+./main
+```
 
 
 3. The application will guide you through the command line. Follow the instructions to create, start, and manage tasks.
