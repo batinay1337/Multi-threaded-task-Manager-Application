@@ -55,3 +55,59 @@ sem_t task_creation_semaphore; // Semaphore for task creation synchronization
 sem_t resource_allocation_semaphore; // Semaphore for resource allocation synchronization
 sem_t resource_release_semaphore; // Semaphore for resource release synchronization
 sem_t run_semaphore;  // Semaphore for running all tasks
+
+
+
+void *task_fn(void *arg) {
+    PCB_t *task = (PCB_t *)arg;
+    
+
+    // Acquire required resources
+    pthread_mutex_lock(&resource_mutex);
+	int i;
+    for (i = 0; i < MAX_RESOURCES; i++) {
+        if (resources.freeResources[i] < task->resources[i]) {
+            // Not enough resources, task is blocked
+            
+            task->state = 2; // Blocked state
+			int j;
+            
+            for (j = 0; j < i; j++) {
+                resources.freeResources[j] += task->resources[j];
+                resources.reserved[task->id][j] -= task->resources[j];
+            }
+            
+            sleep(6);
+
+            pthread_mutex_unlock(&resource_mutex);
+            sem_wait(&resource_allocation_semaphore);
+            pthread_mutex_lock(&resource_mutex);
+
+            i = -1; 
+        } else {
+            // Allocate resources
+            resources.freeResources[i] -= task->resources[i];
+            resources.reserved[task->id][i] += task->resources[i];
+        }
+    }
+
+    pthread_mutex_unlock(&resource_mutex);
+    
+	sem_wait(&run_semaphore);
+    // execute task
+    printf("Executing task %d \n", task->id);
+	printFile(file_name, "Executing task %d \n", task->id);
+    // Release acquired resources
+    pthread_mutex_lock(&resource_mutex);
+	
+    for (i = 0; i < MAX_RESOURCES; i++) {
+        resources.freeResources[i] += task->resources[i];
+        resources.reserved[task->id][i] = 0;
+    }
+
+    pthread_mutex_unlock(&resource_mutex);
+
+    sem_post(&resource_release_semaphore);
+
+    pthread_exit(NULL);
+}
