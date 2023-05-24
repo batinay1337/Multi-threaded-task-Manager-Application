@@ -18,19 +18,23 @@ In this project, I have developed an application that can manage tasks using mul
 
 cd Multi-threaded-task-Manager-Application
 
+--------------------------
+ HOW TO USE?? 
 
-/* HOW TO USE?? 
-
------------------------------------
 c: Create a new task. In prompt you have to enter the priority, resource allocation. Time value will be calculated by your resource choice. 
+
 d: Destroy a task. The program will prompt you to enter the task ID of the task you want to destroy.
+
 l: Display the current task list.
+
 r: Run task. 
+
 f: Clean the txt file. This is important to use, so be careful :)
+
 q: Quit the program.
 
 NOT:: Every error or debug process will be write in output.txt file. Check some errors. 
------------------------------------
+
 
 A- To create a new task, enter C and follow the prompts. For example:
 
@@ -47,7 +51,6 @@ Enter resource 8: 1
 Enter resource 9: 1
 Enter resource 10: 1
 
---------------------------
 Try it! :)
 --------------------------
 
